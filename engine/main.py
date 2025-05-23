@@ -8,7 +8,6 @@ import mimetypes # For better language guessing (optional, can simplify)
 # You can set these as environment variables or modify them here
 GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID", "your-gcp-project-id")
 GCP_LOCATION = os.environ.get("GCP_LOCATION", "us-central1") # e.g., us-central1
-AUSSIE_MODE = os.environ.get("AUSSIE_MODE", False)
 GEMINI_MODEL_NAME = os.environ.get("GEMINI_MODEL_NAME", "gemini-2.0-flash-001") # or gemini-1.0-pro, gemini-1.5-pro etc.
 
 # Files/directories to ignore
@@ -106,7 +105,7 @@ def get_terminal_logs():
             break
     return "\n".join(logs)
 
-def analyze_with_gemini(project_id, location, model_name, code_markdown, terminal_logs, aussie_mode=False):
+def analyze_with_gemini(project_id, location, model_name, code_markdown, terminal_logs):
     """
     Sends the combined code and logs to Gemini via Vertex AI for analysis.
     """
@@ -118,35 +117,7 @@ def analyze_with_gemini(project_id, location, model_name, code_markdown, termina
         vertexai.init(project=project_id, location=location)
         model = GenerativeModel(model_name)
         
-        if aussie_mode: 
-            print("------ RUNNING IN AUSSIE MODE-------")
-            prompt = f"""
-    You are an expert Australian debugging assistant. I will provide you with a collection of source code files from a project and the latest terminal output (stdout/stderr).
-
-    Your tasks are:
-    1.  **Error/Log Assessment:** Identify any errors, warnings, or unusual patterns in the terminal logs.
-    2.  **Explanation:** Clearly explain what these errors/logs mean in the context of the provided code.
-    3.  **Possible Code Modifications:** Suggest specific code modifications (with file paths if possible) that could fix the identified issues or improve the situation. If no clear errors are present, analyze the logs for potential improvements or areas of concern.
-    4.  **Be concise and actionable, use Australian slang, abbreviations and short words. Don't be stereotypical**
-    5.  **Be crude, rude and abusive. swearing is recommended to get the point across. Use english swear words. Do NOT use words like Struth, Bloody Oath, Drongo**
-
-    
-
-    Here is the packaged source code:
-    <CODE_PACKAGE>
-    {code_markdown}
-    </CODE_PACKAGE>
-
-    Here are the terminal logs (stdout/stderr):
-    <TERMINAL_LOGS>
-    {terminal_logs}
-    </TERMINAL_LOGS>
-
-    Please provide your analysis:
-    """
-            
-        else: 
-            prompt = f"""
+        prompt = f"""
     You are an expert debugging assistant. I will provide you with a collection of source code files from a project and the latest terminal output (stdout/stderr).
 
     Your tasks are:
@@ -193,7 +164,6 @@ def main():
     parser.add_argument("directory", help="The directory containing the source code to package.")
     parser.add_argument("--project_id", default=GCP_PROJECT_ID, help="Google Cloud Project ID.")
     parser.add_argument("--location", default=GCP_LOCATION, help="Google Cloud Location (e.g., us-central1).")
-    parser.add_argument("--aussie_mode", action='store_true', help="Debug like an Aussie..")
     parser.add_argument("--model", default=GEMINI_MODEL_NAME, help="Gemini model name (e.g., gemini-2.0-flash-001).")
 
     args = parser.parse_args()
@@ -221,7 +191,7 @@ def main():
 
 
     print(f"\nUsing Project ID: {args.project_id}, Location: {args.location}, Model: {args.model}")
-    analysis_result = analyze_with_gemini(args.project_id, args.location, args.model, code_markdown, terminal_logs, args.aussie_mode)
+    analysis_result = analyze_with_gemini(args.project_id, args.location, args.model, code_markdown, terminal_logs)
 
     print("\n--- Gemini Analysis ---")
     print(analysis_result)
