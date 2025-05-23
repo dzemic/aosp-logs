@@ -2,15 +2,12 @@
 
 ---
 
-# FIX-IT
-
-Literally one of the worst programs ever written. A dumb program (fix-it) for fixing dumb problems made by questionably dumb developers.
 
 ## How it works?
 
 - Run your program in your terminal or tool or choice.
 - Encounter dumb error.
-- Run FIX-IT, providing your VertexAI enabled GCP Project ID, Region and local code directory.
+- Run ENGINE, providing your VertexAI enabled GCP Project ID, Region and local code directory.
 - Copy your error from terminal one into FIX-IT and type "eof" hit enter.
 - Have code and error uploaded and then get AI generated response and possible (questionable) quality AI recommended fix.
 
@@ -19,21 +16,14 @@ Literally one of the worst programs ever written. A dumb program (fix-it) for fi
 > **NOTE:** You will need a Google Cloud project, with VertexAI API's enabled. Additionally the terminal in which you run FIX-IT will need to be authenticated to that Google Cloud project using the **gcloud** cli.
 
 ```
-cd ./fix-it
+cd ./engine
+python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
 python main.py ../example-program --project_id "XXXX" --location "XXXXX"
 ```
 
-## Aussie Mode;
-
-Need responses that are specifically more blunt and direct? Maybe some of the harsh feedback you really need?
-Run it in Aussie Mode! (-aussie_mode)
-
-```
-python main.py ../example-program --project_id "XXXX" --location "XXXXX" -aussie_mode
-```
 
 ## Example Program;
 
