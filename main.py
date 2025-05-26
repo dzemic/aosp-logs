@@ -1,5 +1,6 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 import os
+import base64
 import vertexai
 from vertexai.generative_models import GenerativeModel, Part, GenerationConfig
 
@@ -7,11 +8,16 @@ app = Flask(__name__)
 
 @app.route("/", methods=["POST"])
 def hello():
-    file = request.files.get("file")
-    if not file:
-        return "No file uploaded", 400
+    # Expecting JSON with key "file_base64"
+    data = request.get_json()
+    if not data or "file_base64" not in data:
+        return jsonify({"error": "Missing 'file_base64' in request body"}), 400
 
-    content = file.read().decode("utf-8")
+    try:
+        decoded_bytes = base64.b64decode(data["file_base64"])
+        content = decoded_bytes.decode("utf-8")
+    except Exception as e:
+        return jsonify({"error": f"Failed to decode base64: {str(e)}"}), 400
 
     project_id = os.environ.get("GCP_PROJECT_ID", "your-gcp-project-id")
     location = "us-central1"
@@ -23,7 +29,7 @@ def hello():
     generation_config = GenerationConfig(temperature=0.2)
 
     prompt = f"""
-    Analayse content of this, and provide feedback:
+    Analyse content of this, and provide feedback:
     {content}
     """
 
