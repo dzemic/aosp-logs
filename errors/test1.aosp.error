@@ -1,0 +1,37 @@
+[  1% 123/9500] //frameworks/base:framework-minus-apex javac [common]
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+[  3% 300/9500] target Prebuilt: libchrome (out/target/product/generic/obj/lib/libchrome.so)
+[  5% 520/9500] //system/core/init:init_recovery_32 clang++ recovery_main.cpp
+[  6% 612/9500] target C++: libbase <= system/libbase/file.cpp
+[  8% 760/9500] //hardware/interfaces/graphics:aidl_interface aidl-gen
+[ 10% 900/9500] target C++: libfoo <= vendor/example/foo/foo.cpp
+[ 12% 1100/9500] target Java: services (out/target/common/obj/APPS/services_intermediates/classes-full-debug.jar)
+FAILED: out/target/common/obj/APPS/services_intermediates/classes-full-debug.jar 
+/bin/bash -c "(rm -f out/... && javac -d out/... sources...)"
+error: package android.app does not exist
+error: cannot find symbol class ActivityManager
+error: method does not override or implement a method from a supertype
+3 errors
+
+[ 13% 1200/9500] target C++: libbar <= vendor/example/bar/bar.cpp
+[ 15% 1400/9500] build out/soong/.intermediates/boot.img
+[ 16% 1500/9500] target Dex: framework
+[ 17% 1600/9500] target Java: Settings (out/target/common/obj/APPS/Settings_intermediates/classes-full-debug.jar)
+Note: Some input files use unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+[ 18% 1700/9500] //external/boringssl:libcrypto clang++
+error: use of undeclared identifier 'OPENSSL_malloc'
+error: member access into incomplete type 'EVP_PKEY'
+2 errors
+
+[ 19% 1800/9500] target StaticLib: libabc (out/target/common/obj/lib/libabc.a)
+[ 20% 1900/9500] target SharedLib: libdef (out/target/common/obj/lib/libdef.so)
+ninja: error: 'out/target/product/generic/system/lib/libbluetooth.so', needed by 'out/target/product/generic/system/bin/bluetoothd', missing and no known rule to make it
+
+FAILED: ninja: build stopped: subcommand failed.
+22:17:33 ninja failed with: exit status 1
+
+#### build failed with 5 errors ####
+
