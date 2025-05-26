@@ -29,7 +29,13 @@ def hello():
     generation_config = GenerationConfig(temperature=0.2)
 
     prompt = f"""
-    Analyse content of this, and provide feedback:
+    You are an expert debugging assistant. I will provide you with a collection of source code files from a project and the latest terminal output (stdout/stderr).
+    Your tasks are:
+    1.  **Error/Log Assessment:** Identify any errors, warnings, or unusual patterns in the terminal logs.
+    2.  **Explanation:** Clearly explain what these errors/logs mean in the context of the provided code.
+    3.  **Possible Code Modifications:** Suggest specific code modifications (with file paths if possible) that could fix the identified issues or improve the situation. If no clear errors are present, analyze the logs for potential improvements or areas of concern.
+    4.  **Be concise and actionable.**
+    Here is the packaged source code:
     {content}
     """
 
