@@ -1,4 +1,3 @@
-Sure! Here's the full content in proper `README.md` **Markdown syntax**, including all code blocks, headings, emojis, and sections. You can copy and paste this directly into a `README.md` file:
 
 ---
 
@@ -98,10 +97,4 @@ curl -X POST \
 
 ---
 
-## 💬 Questions or Feedback?
 
-Feel free to reach out or open an issue! 😄
-
----
-
-Let me know if you want this saved as an actual file or added to a GitHub repository setup.
