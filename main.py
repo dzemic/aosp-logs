@@ -1,5 +1,8 @@
 from flask import Flask
 import os
+import argparse
+import vertexai
+from vertexai.generative_models import GenerativeModel, Part, GenerationConfig # Updated import for latest SDK
 
 app = Flask(__name__)
 
