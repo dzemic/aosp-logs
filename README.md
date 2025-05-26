@@ -110,10 +110,3 @@ curl -X POST \
 * For production deployments, enable authentication and secure access.
 
 ---
-
-```
-
----
-
-✅ Let me know if you want this saved as a `.md` file or automatically committed to your repo.
-```
