@@ -1,19 +1,37 @@
 
 ---
 
+````markdown
 # 🚀 AOSP Logs Processor – GCP Cloud Run Deployment
 
 This project deploys an **AOSP logs processor** service using **Google Cloud Run** and **Docker**.
 
 ---
 
+## 🧰 Setup: Define Environment Variables
+
+Before you begin, define the necessary variables to reuse them in all commands:
+
+```bash
+# 🔧 Basic configuration
+PROJECT_ID=test_gcp_project
+SERVICE_ACCOUNT_NAME=aosp-logs
+REGION=us-central1
+IMAGE_NAME=aosp-logs
+REPO_URL=europe-docker.pkg.dev/$PROJECT_ID/aosp-logs/$IMAGE_NAME
+SERVICE_ACCOUNT_EMAIL=$SERVICE_ACCOUNT_NAME@$PROJECT_ID.iam.gserviceaccount.com
+CLOUD_RUN_URL=https://aosp-logs-674040060205.$REGION.run.app
+````
+
+---
+
 ## 📋 Prerequisites
 
-Before starting, authenticate with Google Cloud and select your project:
+Authenticate with Google Cloud and set your project:
 
 ```bash
 gcloud auth login
-gcloud config set project vw-cariad-ivicariad-ivi-ci-dzv
+gcloud config set project $PROJECT_ID
 ```
 
 ---
@@ -23,9 +41,6 @@ gcloud config set project vw-cariad-ivicariad-ivi-ci-dzv
 Create a service account to be used by Cloud Run with Vertex AI access:
 
 ```bash
-SERVICE_ACCOUNT_NAME=aosp-logs
-PROJECT_ID=vw-cariad-ivicariad-ivi-ci-dzv
-
 gcloud iam service-accounts create $SERVICE_ACCOUNT_NAME \
   --project=$PROJECT_ID \
   --description="Cloud Run SA with Vertex AI access" \
@@ -39,28 +54,28 @@ gcloud iam service-accounts create $SERVICE_ACCOUNT_NAME \
 ### 🔧 Build the image
 
 ```bash
-docker build . -t europe-docker.pkg.dev/vw-cariad-ivicariad-ivi-ci-dzv/aosp-logs/aosp-logs:latest
+docker build . -t $REPO_URL:latest
 ```
 
 ### 📤 Push the image
 
 ```bash
-docker push europe-docker.pkg.dev/vw-cariad-ivicariad-ivi-ci-dzv/aosp-logs/aosp-logs
+docker push $REPO_URL
 ```
 
 ---
 
 ## ☁️ Deploy to Cloud Run
 
-Deploy your container to Cloud Run with the required configuration:
+Deploy your container to Cloud Run:
 
 ```bash
-gcloud run deploy aosp-logs \
-  --image europe-docker.pkg.dev/vw-cariad-ivicariad-ivi-ci-dzv/aosp-logs/aosp-logs \
-  --set-env-vars GCP_PROJECT_ID=vw-cariad-ivicariad-ivi-ci-dzv \
+gcloud run deploy $IMAGE_NAME \
+  --image $REPO_URL \
+  --set-env-vars GCP_PROJECT_ID=$PROJECT_ID \
   --platform managed \
-  --region us-central1 \
-  --service-account="aosp-logs@vw-cariad-ivicariad-ivi-ci-dzv.iam.gserviceaccount.com" \
+  --region $REGION \
+  --service-account=$SERVICE_ACCOUNT_EMAIL \
   --allow-unauthenticated
 ```
 
@@ -68,7 +83,7 @@ gcloud run deploy aosp-logs \
 
 ## 🧪 Test the Deployment
 
-To test your deployment, pass an `.error` file encoded as base64:
+To test your deployed service, pass a `.error` file encoded as base64:
 
 ```bash
 TOKEN=$(gcloud auth print-identity-token)
@@ -77,7 +92,7 @@ curl -X POST \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
   -d "{\"file_base64\": \"$(base64 -w 0 ./errors/test.aosp.txt)\"}" \
-  https://aosp-logs-674040060205.us-central1.run.app/
+  $CLOUD_RUN_URL/
 ```
 
 ✅ If everything works, you’ll receive a response from the service.
@@ -86,15 +101,19 @@ curl -X POST \
 
 ## 🧾 Notes
 
-* Ensure your service account has sufficient IAM permissions:
+* Ensure your service account has the following roles:
 
   * `Vertex AI User`
   * `Cloud Run Invoker`
   * `Cloud Run Admin`
-  * And any other required roles
-* Update the region or project name if your setup differs.
-* For production deployments, consider enabling authentication and securing your endpoints.
+* Modify regions and image names if your setup differs.
+* For production deployments, enable authentication and secure access.
 
 ---
 
+```
 
+---
+
+✅ Let me know if you want this saved as a `.md` file or automatically committed to your repo.
+```
