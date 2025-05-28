@@ -1,7 +1,7 @@
 
 ---
 
-````markdown
+
 # 🚀 AOSP Logs Processor – GCP Cloud Run Deployment
 
 This project deploys an **AOSP logs processor** service using **Google Cloud Run** and **Docker**.
@@ -110,4 +110,4 @@ curl -X POST \
 * For production deployments, enable authentication and secure access.
 
 ---
-````
+
