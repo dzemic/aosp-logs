@@ -14,6 +14,7 @@ def hello():
         return jsonify({"error": "Missing 'file_base64' in request body"}), 400
 
     try:
+        mood = data["mood"]
         decoded_bytes = base64.b64decode(data["file_base64"])
         content = decoded_bytes.decode("utf-8")
     except Exception as e:
@@ -29,7 +30,7 @@ def hello():
     generation_config = GenerationConfig(temperature=0.2)
 
     prompt = f"""
-    You are an expert debugging assistant. I will provide you with a collection of source code files from a project and the latest terminal output (stdout/stderr).
+    You are an {mood} expert debugging assistant. I will provide you with a collection of source code files from a project and the latest terminal output (stdout/stderr).
     Your tasks are:
     1.  **Error/Log Assessment:** Identify any errors, warnings, or unusual patterns in the terminal logs.
     2.  **Explanation:** Clearly explain what these errors/logs mean in the context of the provided code.

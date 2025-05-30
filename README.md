@@ -87,11 +87,12 @@ To test your deployed service, pass a `.error` file encoded as base64:
 
 ```bash
 TOKEN=$(gcloud auth print-identity-token)
+MOOD="rude"
 
 curl -X POST \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
-  -d "{\"file_base64\": \"$(base64 -w 0 ./errors/test.aosp.txt)\"}" \
+  -d "{\"file_base64\": \"$(base64 -w 0 ./errors/test.aosp.txt)\", \"mood\": \"$MOOD\"}"
   $CLOUD_RUN_URL/
 ```
 
